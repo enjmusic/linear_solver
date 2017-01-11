@@ -46,9 +46,9 @@ def parse_equation(string)
 			newpair = VarPair.new
 			newpair.varname = token
 			if unmatched_sign.nil?
-				newpair.coefficient = unmatched_coef.nil? ? 1 : unmatched_coef
+				newpair.coefficient = unmatched_coef.nil? ? 1.to_r : unmatched_coef
 			elsif unmatched_coef.nil?
-				newpair.coefficient = unmatched_sign
+				newpair.coefficient = unmatched_sign.to_r
 			else
 				newpair.coefficient = unmatched_sign * unmatched_coef
 			end

@@ -31,11 +31,11 @@ loop do
 	end
 
 	equations << Equation.new(terms, result)
-
-	equations.last.disp # TEMP
-	puts # TEMP
+	# equations.last.disp # TEMP
+	# puts # TEMP
 end
 
+puts
 puts "Solving system of equations..."
 
 # cross reference all equations' varnames to 
@@ -60,10 +60,24 @@ equations.each_with_index do |eq, eq_idx|
 	eq_matrix[eq_idx][-1] = eq.eq_res
 end
 
-print_row_reduce_mats(eq_matrix)
+puts "Linear system matrix, before Gaussian elimination:"
+print_row_reduce_mat(eq_matrix)
 
-# perform row reduction to solve linear system
+# perform Gaussian elimination to solve linear system
 eq_matrix = row_reduce(eq_matrix)
 
-print_row_reduce_mats(eq_matrix)
+puts "Linear system matrix, after Gaussian elimination:"
+print_row_reduce_mat(eq_matrix)
+
+# continue Gauss-Jordan elimination to isolate variables,
+# producing reduced row echelon form of the system matrix
+eq_matrix = back_eliminate(eq_matrix)
+
+puts "Linear system matrix, after completing Gauss-Jordan elimination:"
+print_row_reduce_mat(eq_matrix)
+
+all_vars.each_with_index do |var, idx|
+	puts "#{var} = #{eq_matrix[idx][-1]}"
+end
+puts
 
