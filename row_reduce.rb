@@ -79,6 +79,15 @@ def row_reduce(eq_matrix)
 	return eq_matrix
 end
 
+# Checks consistency of row-reduced system matrix
+def is_consistent(eq_matrix)
+	num_vars = eq_matrix[0].length - 1
+	eq_matrix.each do |row|
+		return false if row[0...-1].inject(:+) == 0 and row[-1] != 0
+	end
+	return true
+end
+
 # Performs back elimination to achieve reduced 
 # row echelon form, after having performed 
 # Gaussian elimination as implemented above

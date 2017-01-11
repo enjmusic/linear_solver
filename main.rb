@@ -66,6 +66,12 @@ print_row_reduce_mat(eq_matrix)
 # perform Gaussian elimination to solve linear system
 eq_matrix = row_reduce(eq_matrix)
 
+if not is_consistent(eq_matrix)
+	puts "System of equations is not consistent - exiting!"
+	puts
+	exit 1
+end
+
 puts "Linear system matrix, after Gaussian elimination:"
 print_row_reduce_mat(eq_matrix)
 
