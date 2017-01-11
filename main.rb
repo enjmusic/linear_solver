@@ -50,22 +50,20 @@ if all_vars.size > equations.length
 end
 
 all_vars = all_vars.keys
-# m x n parameter matrix, where m is # equations and n is # variables
-eq_matrix = Array.new(equations.length) { Array.new(all_vars.size) }
-# m x 1 column matrix of equation results, where m is # of equations
-res_matrix = Array.new(equations.length)
+# m x (n+1) parameter matrix, where m is # equations and n is # variables
+eq_matrix = Array.new(equations.length) { Array.new(all_vars.size + 1) }
 
 equations.each_with_index do |eq, eq_idx|
 	all_vars.each_with_index do |var, var_idx|
 		eq_matrix[eq_idx][var_idx] = eq.eq_terms.key?(var) ? eq.eq_terms[var] : 0
 	end
-	res_matrix[eq_idx] = eq.eq_res
+	eq_matrix[eq_idx][-1] = eq.eq_res
 end
 
-print_row_reduce_mats(eq_matrix, res_matrix)
+print_row_reduce_mats(eq_matrix)
 
 # perform row reduction to solve linear system
-eq_matrix, res_matrix = row_reduce(eq_matrix, res_matrix)
+eq_matrix = row_reduce(eq_matrix)
 
-print_row_reduce_mats(eq_matrix, res_matrix)
+print_row_reduce_mats(eq_matrix)
 

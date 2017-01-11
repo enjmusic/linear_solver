@@ -14,9 +14,7 @@ SIGNMULT = {'+' => 1, '-' => -1}
 # Converts string to decimal, rational, or 
 # floating point number if possible, otherwise nil
 def str_to_num(string)
-	return string.to_r if string =~ /^\d+\/\d+$/ rescue nil
-	return string.to_i if string =~ /^\d+$/
-	return Float(string) rescue nil
+	return string.to_r rescue nil
 end
 
 def parse_equation(string)
@@ -27,7 +25,7 @@ def parse_equation(string)
 	return nil, nil if rhs.nil?
 
 	# parse the left hand side into variable, coefficient pairs
-	lhs_tokens = sides[0].scan(/[a-z]+|\d+\/\d+|\d+|[+-]|\S/)
+	lhs_tokens = sides[0].scan(/[a-z]+|\d+.\d+|\d+\/\d+|\d+|[+-]|\S/)
 	lhs_varpairs = []
 
 	unmatched_sign = nil
@@ -38,13 +36,6 @@ def parse_equation(string)
 				unmatched_sign = SIGNMULT[token]
 			else
 				unmatched_sign *= SIGNMULT[token]
-			end
-		elsif not str_to_num(token).nil?
-			if unmatched_coef.nil?
-				unmatched_coef = str_to_num(token)
-			else
-				puts "Duplicate coefficient encountered: #{token}"
-				return nil, nil
 			end
 		elsif token =~ /^[a-z]+$/
 			if unmatched_sign.nil? and unmatched_coef.nil? and idx > 0
@@ -64,6 +55,13 @@ def parse_equation(string)
 			lhs_varpairs << newpair
 
 			unmatched_sign, unmatched_coef = [nil, nil]
+		elsif not str_to_num(token).nil?
+			if unmatched_coef.nil?
+				unmatched_coef = str_to_num(token)
+			else
+				puts "Duplicate coefficient encountered: #{token}"
+				return nil, nil
+			end
 		else
 			puts "Invalid symbol: #{token}"
 			return nil, nil
